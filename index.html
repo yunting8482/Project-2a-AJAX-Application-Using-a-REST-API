@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="RAIL//CITY - Live Finnish train departures">
+
+  <title>RAIL//CITY | Live Train Traffic</title>
+
+  <!-- Our custom urban styling -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Native JavaScript only -->
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Main navigation -->
+  <header class="site-header">
+    <div class="header-content">
+
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚆</span>
+        RAIL<span class="purple">//</span>CITY
+      </a>
+
+      <div class="network-status">
+        <span class="live-dot"></span>
+        LIVE NETWORK
+      </div>
+
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Urban hero section -->
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <p class="eyebrow">
+          FINLAND RAIL NETWORK / 001
+        </p>
+
+        <h1>
+          MOVE THROUGH<br>
+          <span class="highlight">THE CITY.</span>
+        </h1>
+
+        <p class="hero-description">
+          Real-time departures.
+          No guessing. Just movement.
+        </p>
+
+      </div>
+
+      <!-- Decorative street-art element -->
+      <div class="street-art" aria-hidden="true">
+        ♛
+      </div>
+
+    </section>
+
+    <!-- Station search area -->
+    <section class="search-panel">
+
+      <div class="search-group">
+
+        <label for="stationSelect">
+          CHOOSE A STATION
+        </label>
+
+        <select id="stationSelect">
+          <option value="">
+            Select a station
+          </option>
+
+          <option value="HKI">
+            Helsinki Central
+          </option>
+
+          <option value="PSL">
+            Pasila
+          </option>
+
+          <option value="TPE">
+            Tampere
+          </option>
+
+          <option value="TKU">
+            Turku
+          </option>
+
+          <option value="LH">
+            Lahti
+          </option>
+
+          <option value="OL">
+            Oulu
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="search-divider"></div>
+
+      <div class="search-group">
+
+        <label for="stationSearch">
+          OR SEARCH FOR A STATION
+        </label>
+
+        <input
+          type="search"
+          id="stationSearch"
+          placeholder="Enter station name..."
+          autocomplete="off"
+        >
+
+      </div>
+
+      <button id="searchBtn" class="primary-btn"
+              type="button">
+        SEARCH TRAINS →
+      </button>
+
+    </section>
+
+    <!-- Live departure board -->
+    <section class="departures-section">
+
+      <div class="section-header">
+
+        <h2>
+          <span class="purple">//</span>
+          DEPARTURE BOARD
+        </h2>
+
+        <div class="board-actions">
+
+          <button id="refreshBtn"
+                  class="refresh-btn"
+                  type="button">
+            ↻ REFRESH
+          </button>
+
+          <span class="feed-label">
+            <span class="live-dot"></span>
+            LIVE FEED
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="departure-board">
+
+        <div class="station-heading">
+
+          <h3 id="stationTitle">
+            Select a station
+          </h3>
+
+          <p id="stationSubtitle">
+            Live departures
+          </p>
+
+        </div>
+
+        <!-- Loading and error messages -->
+        <p id="statusMessage" role="status"
+           aria-live="polite">
+          Choose a station to view live trains.
+        </p>
+
+        <!-- Timetable -->
+        <div class="table-container">
+
+          <table class="train-table">
+
+            <thead>
+              <tr>
+                <th scope="col">DEP.</th>
+                <th scope="col">TRAIN</th>
+                <th scope="col">DESTINATION</th>
+                <th scope="col">PLATFORM</th>
+                <th scope="col">STATUS</th>
+              </tr>
+            </thead>
+
+            <!-- JavaScript inserts live rows here -->
+            <tbody id="trainResults">
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+<!-- ======================================
+     CITY PULSE & STATION INTEL
+     ====================================== -->
+
+<section class="station-intelligence">
+
+  <div class="section-header">
+    <h2>
+      <span class="purple">//</span>
+      STATION INTELLIGENCE
+    </h2>
+  </div>
+
+  <div class="intelligence-grid">
+
+    <!-- CITY PULSE: TRAIN ACTIVITY -->
+    <article class="intel-card pulse-card">
+
+      <div class="intel-card-header">
+        <div>
+          <p class="eyebrow">LIVE ACTIVITY</p>
+          <h3>⚡ CITY PULSE</h3>
+        </div>
+
+        <span class="intel-tag">TRAIN TRAFFIC</span>
+      </div>
+
+      <!-- Traffic level -->
+      <div class="traffic-status">
+        <h4 id="trafficLevel">CALCULATING...</h4>
+
+        <p id="trafficDescription">
+          Checking train activity at your station.
+        </p>
+      </div>
+
+      <!-- Traffic activity meter -->
+      <div class="traffic-meter">
+        <div
+          id="trafficMeterFill"
+          class="traffic-meter-fill"
+          role="progressbar"
+          aria-label="Train traffic activity"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0">
+        </div>
+      </div>
+
+      <!-- Live traffic statistics -->
+      <div class="traffic-stats">
+
+        <div class="traffic-stat">
+          <span id="hourlyTrains">--</span>
+          <small>TRAINS / HOUR</small>
+        </div>
+
+        <div class="traffic-stat">
+          <span id="delayedTrains">--</span>
+          <small>DELAYS</small>
+        </div>
+
+        <div class="traffic-stat">
+          <span id="cancelledTrains">--</span>
+          <small>CANCELLED</small>
+        </div>
+
+      </div>
+
+      <p class="intel-disclaimer">
+        Activity reflects scheduled train movements,
+        not passenger crowding.
+      </p>
+
+    </article>
+
+    <!-- STATION INTEL: NEWS AND DISRUPTIONS -->
+    <article class="intel-card news-card">
+
+      <div class="intel-card-header">
+        <div>
+          <p class="eyebrow">STATION UPDATES</p>
+          <h3>📢 STATION INTEL</h3>
+        </div>
+
+        <span class="intel-tag">OFFICIAL ALERTS</span>
+      </div>
+
+      <p id="newsStationName">
+        Select a station
+      </p>
+
+      <!-- Loading, empty, and error messages -->
+      <p id="newsStatus" role="status"
+         aria-live="polite">
+        Station updates will appear here.
+      </p>
+
+      <!-- JavaScript inserts verified notices -->
+      <div id="stationNews" class="news-list">
+      </div>
+
+      <div class="news-footer">
+        <span>Powered by official railway data</span>
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+
+    <!-- Information section -->
+    <section class="info-strip">
+
+      <div class="info-item">
+        <span class="info-icon">◉</span>
+        REAL-TIME DATA
+      </div>
+
+      <div class="info-item">
+        <span class="info-icon">↻</span>
+        LIVE UPDATES
+      </div>
+
+      <div class="info-item">
+        <span class="info-icon">⌖</span>
+        FINLAND RAIL NETWORK
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+
+    <div class="footer-content">
+
+      <p>
+        RAIL<span class="purple">//</span>CITY
+        © 2026
+      </p>
+
+      <p>
+        Powered by Digitraffic Open Data
+      </p>
+
+      <p>
+        Built with HTML, CSS & Vanilla JavaScript
+      </p>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>

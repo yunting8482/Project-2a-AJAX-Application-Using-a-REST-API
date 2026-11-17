@@ -1,0 +1,1232 @@
+
+/* ==========================================
+   RAIL//CITY - URBAN PURPLE EDITION
+   Live Train Traffic Dashboard
+   ========================================== */
+
+/* ---------- COLOR SYSTEM ---------- */
+
+:root {
+  --background: #111116;
+  --surface: #1b1b23;
+  --surface-light: #292933;
+  --gunmetal: #363640;
+  --purple: #9636e8;
+  --purple-bright: #bd69ff;
+  --purple-dark: #542078;
+  --silver: #d8d8e1;
+  --white: #f7f7fa;
+  --muted: #a1a1ad;
+  --border: #41414c;
+  --success: #b987ff;
+  --warning: #ffc36a;
+}
+
+/* ---------- GLOBAL RESET ---------- */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Arial", "Helvetica", sans-serif;
+  color: var(--white);
+  background:
+    radial-gradient(
+      ellipse at 85% 8%,
+      rgba(130, 34, 190, 0.19),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 10% 80%,
+      rgba(90, 38, 135, 0.12),
+      transparent 45%
+    ),
+    var(--background);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Subtle industrial grid texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 65px 65px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--purple-bright);
+  outline-offset: 4px;
+}
+
+.purple {
+  color: var(--purple-bright);
+}
+
+/* ---------- HEADER ---------- */
+
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid rgba(180, 100, 255, 0.18);
+  background: rgba(16, 16, 21, 0.94);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: auto;
+  padding: 24px 35px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -1.5px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.logo-icon {
+  font-size: 27px;
+  font-style: normal;
+}
+
+.network-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 8px 17px;
+  border: 1px solid var(--purple);
+  border-radius: 30px;
+
+  color: var(--purple-bright);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+
+  background: var(--purple-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--purple);
+
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 6px var(--purple);
+  }
+
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 18px var(--purple-bright);
+  }
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+
+.container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 0 35px;
+}
+
+/* ---------- HERO SECTION ---------- */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 340px;
+  padding: 55px 10px;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(17, 17, 22, 0.98) 15%,
+      rgba(17, 17, 22, 0.65) 70%,
+      transparent
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(150, 54, 232, 0.25),
+      transparent 55%
+    );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  margin-bottom: 13px;
+
+  color: var(--purple-bright);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 6.5vw, 88px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.04;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+
+  /* Metallic chrome-inspired lettering */
+  background: linear-gradient(
+    180deg,
+    #ffffff 5%,
+    #e3e3eb 45%,
+    #92929f 100%
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero .highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.hero .highlight::after {
+  content: "";
+  position: absolute;
+  bottom: -9px;
+  left: 10%;
+  width: 85%;
+  height: 7px;
+
+  background: var(--purple);
+  border-radius: 10px;
+  transform: rotate(-2deg);
+
+  box-shadow: 0 0 20px rgba(150, 54, 232, 0.65);
+}
+
+.hero-description {
+  margin-top: 32px;
+  color: var(--silver);
+  font-size: 17px;
+  letter-spacing: 0.2px;
+}
+
+/* Oversized decorative crown */
+.street-art {
+  position: absolute;
+  right: 7%;
+  top: 3%;
+
+  color: var(--purple);
+  font-size: clamp(150px, 24vw, 320px);
+  line-height: 1;
+  opacity: 0.24;
+
+  transform: rotate(-15deg);
+  text-shadow: 0 0 55px rgba(150, 54, 232, 0.45);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- SEARCH PANEL ---------- */
+
+.search-panel {
+  display: grid;
+  grid-template-columns: 1fr 1px 1.3fr auto;
+  align-items: end;
+  gap: 28px;
+
+  padding: 30px;
+  margin-bottom: 36px;
+
+  background: linear-gradient(
+    135deg,
+    #303039,
+    #1c1c24
+  );
+
+  border: 1px solid #55515f;
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(125, 45, 190, 0.07);
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.search-group label {
+  color: var(--silver);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.search-group select,
+.search-group input {
+  width: 100%;
+  height: 56px;
+  padding: 0 17px;
+
+  color: var(--white);
+  background: #24242c;
+
+  border: 1px solid #62616b;
+  border-radius: 10px;
+
+  outline: none;
+  transition: 0.25s ease;
+}
+
+.search-group select {
+  cursor: pointer;
+}
+
+.search-group input::placeholder {
+  color: #9999a5;
+}
+
+.search-group select:focus,
+.search-group input:focus {
+  border-color: var(--purple-bright);
+  box-shadow: 0 0 0 3px rgba(150, 54, 232, 0.15);
+}
+
+.search-divider {
+  height: 56px;
+  width: 1px;
+  background: #66616e;
+}
+
+/* Main purple action button */
+.primary-btn {
+  height: 56px;
+  padding: 0 30px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #bd69ff,
+    #8731d8
+  );
+
+  color: #110a17;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+
+  box-shadow: 0 5px 20px rgba(150, 54, 232, 0.25);
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(150, 54, 232, 0.55);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+}
+
+/* ---------- DEPARTURE SECTION ---------- */
+
+.departures-section {
+  margin-bottom: 35px;
+
+  padding: 22px;
+  background: rgba(24, 24, 30, 0.95);
+
+  border: 1px solid #45414e;
+  border-radius: 20px;
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.35),
+    0 0 35px rgba(120, 30, 180, 0.06);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: clamp(19px, 3vw, 30px);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.7px;
+}
+
+.board-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.refresh-btn {
+  padding: 9px 16px;
+
+  color: var(--silver);
+  background: #22222a;
+
+  border: 1px solid #77717f;
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.refresh-btn:hover {
+  border-color: var(--purple-bright);
+  color: var(--purple-bright);
+}
+
+.feed-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--purple-bright);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ---------- DEPARTURE BOARD ---------- */
+
+.departure-board {
+  padding: 25px;
+
+  background: linear-gradient(
+    145deg,
+    #2b2b34,
+    #1c1c23
+  );
+
+  border: 1px solid #44414c;
+  border-radius: 14px;
+}
+
+.station-heading {
+  padding-left: 20px;
+  margin-bottom: 24px;
+  border-left: 5px solid var(--purple);
+}
+
+.station-heading h3 {
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.station-heading p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+#statusMessage {
+  margin: 12px 0;
+  color: var(--silver);
+  font-size: 14px;
+}
+
+#statusMessage:empty {
+  display: none;
+}
+
+/* ---------- TRAIN TABLE ---------- */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.train-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 7px;
+  text-align: left;
+}
+
+.train-table th {
+  padding: 10px 16px;
+
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.train-table td {
+  padding: 16px;
+
+  background: #303039;
+  border-top: 1px solid #484650;
+  border-bottom: 1px solid #484650;
+
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.train-table tbody tr:hover td {
+  background: #3d3449;
+}
+
+.train-table td:first-child {
+  border-left: 1px solid #484650;
+  border-radius: 10px 0 0 10px;
+
+  color: var(--white);
+  font-size: 21px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.train-table td:last-child {
+  border-right: 1px solid #484650;
+  border-radius: 0 10px 10px 0;
+}
+
+/* Train line number badge */
+.train-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 45px;
+  padding: 5px 12px;
+
+  background: linear-gradient(
+    135deg,
+    #bd69ff,
+    #8231c9
+  );
+
+  color: #13091b;
+  border-radius: 8px;
+
+  font-weight: 900;
+  font-size: 16px;
+}
+
+/* Status indicators */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+
+  border: 1px solid var(--purple-bright);
+  border-radius: 20px;
+
+  color: var(--purple-bright);
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.status-badge.delayed {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.status-badge.cancelled {
+  border-color: #ff697b;
+  color: #ff697b;
+}
+
+/* ---------- INFORMATION STRIP ---------- */
+
+.info-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 35px;
+
+  margin: 35px 0;
+  padding: 22px;
+
+  border-top: 1px solid #393541;
+  border-bottom: 1px solid #393541;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.info-icon {
+  color: var(--purple-bright);
+  font-size: 20px;
+}
+
+/* ---------- FOOTER ---------- */
+
+.site-footer {
+  padding: 28px 35px;
+  background: #101014;
+  border-top: 1px solid #393541;
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: auto;
+
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.footer-content p:first-child {
+  color: var(--white);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+/* ---------- ENTRANCE ANIMATION ---------- */
+
+.hero-content {
+  animation: slideUp 0.7s ease both;
+}
+
+.search-panel {
+  animation: slideUp 0.8s ease both;
+}
+
+.departures-section {
+  animation: slideUp 0.9s ease both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 1050px) {
+
+  .search-panel {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .search-divider {
+    display: none;
+  }
+
+  .primary-btn {
+    grid-column: 1 / -1;
+  }
+
+  .street-art {
+    right: 2%;
+    opacity: 0.15;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 650px) {
+
+  .header-content {
+    padding: 18px;
+  }
+
+  .logo {
+    font-size: 21px;
+  }
+
+  .logo-icon {
+    font-size: 20px;
+  }
+
+  .network-status {
+    padding: 7px 10px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+
+  .hero {
+    min-height: 290px;
+    padding: 40px 5px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 9vw, 55px);
+    letter-spacing: -1.5px;
+  }
+
+  .hero-description {
+    font-size: 14px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .street-art {
+    font-size: 170px;
+    right: -20px;
+    top: 30px;
+    opacity: 0.12;
+  }
+
+  .search-panel {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .primary-btn {
+    grid-column: auto;
+    width: 100%;
+  }
+
+  .departures-section {
+    padding: 12px;
+  }
+
+  .section-header {
+    padding: 8px 4px;
+  }
+
+  .board-actions {
+    gap: 15px;
+  }
+
+  .departure-board {
+    padding: 15px 10px;
+  }
+
+  .station-heading {
+    padding-left: 12px;
+  }
+
+  .train-table {
+    min-width: 620px;
+  }
+
+  .train-table td {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .train-table td:first-child {
+    font-size: 17px;
+  }
+
+  .info-strip {
+    gap: 18px;
+  }
+
+  .info-item {
+    font-size: 10px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ---------- ACCESSIBILITY ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ==========================================
+   RAIL//CITY — STATION INTELLIGENCE
+   CITY PULSE + STATION INTEL
+   ========================================== */
+
+.station-intelligence {
+  margin: 42px 0;
+  padding: 0;
+}
+
+/* SECTION TITLE */
+
+.station-intelligence .section-header {
+  margin-bottom: 24px;
+}
+
+.station-intelligence .section-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #f7f7fa;
+}
+
+.station-intelligence .section-header .purple {
+  color: #bd69ff;
+}
+
+/* TWO-COLUMN DASHBOARD */
+
+.intelligence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* CARD DESIGN */
+
+.intel-card {
+  position: relative;
+  min-width: 0;
+  padding: 28px;
+  overflow: hidden;
+
+  background: linear-gradient(
+    145deg,
+    #2c2c36 0%,
+    #1b1b23 55%,
+    #15151c 100%
+  );
+
+  border: 1px solid #41414c;
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.intel-card:hover {
+  border-color: #9636e8;
+
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.4),
+    0 0 22px rgba(150, 54, 232, 0.12);
+
+  transform: translateY(-3px);
+}
+
+/* PURPLE ACCENT BAR */
+
+.intel-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+
+  background: linear-gradient(
+    90deg,
+    #542078,
+    #bd69ff,
+    #9636e8,
+    transparent
+  );
+}
+
+/* CARD HEADERS */
+
+.intel-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.intel-card-header .eyebrow {
+  margin-bottom: 8px;
+  color: #bd69ff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.intel-card-header h3 {
+  margin: 0;
+  color: #f7f7fa;
+  font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.intel-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+
+  background: rgba(150, 54, 232, 0.12);
+  color: #d6a2ff;
+
+  border: 1px solid rgba(189, 105, 255, 0.35);
+  border-radius: 6px;
+
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   CITY PULSE
+   ========================================== */
+
+.traffic-status {
+  margin-bottom: 24px;
+}
+
+#trafficLevel {
+  margin: 0 0 8px;
+
+  color: #bd69ff;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  text-shadow: 0 0 20px rgba(150, 54, 232, 0.25);
+}
+
+#trafficDescription {
+  margin: 0;
+  color: #a1a1ad;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* TRAFFIC ACTIVITY METER */
+
+.traffic-meter {
+  height: 12px;
+  margin-bottom: 28px;
+  overflow: hidden;
+
+  background: #101015;
+  border: 1px solid #41414c;
+  border-radius: 999px;
+}
+
+.traffic-meter-fill {
+  width: 0%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    #542078,
+    #9636e8,
+    #bd69ff
+  );
+
+  border-radius: inherit;
+
+  box-shadow: 0 0 15px rgba(189, 105, 255, 0.55);
+
+  transition: width 0.6s ease;
+}
+
+/* TRAIN ACTIVITY STATISTICS */
+
+.traffic-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.traffic-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100px;
+  padding: 14px 8px;
+
+  background: #292933;
+  border: 1px solid #41414c;
+  border-radius: 12px;
+
+  text-align: center;
+}
+
+.traffic-stat span {
+  color: #f7f7fa;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.traffic-stat small {
+  margin-top: 9px;
+
+  color: #a1a1ad;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  line-height: 1.4;
+}
+
+.intel-disclaimer {
+  margin: 0;
+  padding-top: 16px;
+
+  border-top: 1px solid #41414c;
+
+  color: #8f8f9e;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   STATION INTEL — NEWS AND ALERTS
+   ========================================== */
+
+#newsStationName {
+  margin-bottom: 12px;
+
+  color: #f7f7fa;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+#newsStatus {
+  margin-bottom: 18px;
+
+  color: #a1a1ad;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* NEWS ITEMS ADDED LATER BY JAVASCRIPT */
+
+.news-item {
+  padding: 18px;
+
+  background: rgba(54, 54, 64, 0.6);
+  border: 1px solid #41414c;
+  border-left: 3px solid #9636e8;
+  border-radius: 10px;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.news-item:hover {
+  background: #30303b;
+  border-color: #bd69ff;
+}
+
+.news-item h4 {
+  margin: 0 0 10px;
+
+  color: #f7f7fa;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.news-item p {
+  margin: 0 0 12px;
+
+  color: #b9b9c5;
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.news-item a {
+  color: #bd69ff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.news-item a:hover {
+  color: #e0b5ff;
+  text-decoration: underline;
+}
+
+.news-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+
+  border-top: 1px solid #41414c;
+
+  color: #8f8f9e;
+  font-size: 0.72rem;
+  letter-spacing: 0.3px;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 900px) {
+  .intelligence-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .station-intelligence {
+    margin: 28px 0;
+  }
+
+  .intel-card {
+    padding: 20px;
+  }
+
+  .intel-card-header {
+    margin-bottom: 22px;
+  }
+
+  .traffic-stats {
+    gap: 8px;
+  }
+
+  .traffic-stat {
+    min-height: 85px;
+    padding: 12px 5px;
+  }
+
+  .traffic-stat small {
+    font-size: 0.53rem;
+    letter-spacing: 0;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  .intel-card,
+  .traffic-meter-fill,
+  .news-item {
+    transition: none;
+  }
+
+  .intel-card:hover {
+    transform: none;
+  }
+}
